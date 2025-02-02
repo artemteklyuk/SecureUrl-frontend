@@ -1,26 +1,28 @@
-import { BrowserStorageKey, ServiceWorkerEvent } from './shared/constants';
-import { setBrowserHeaders } from './shared/utils/setBrowserHeaders';
+import { ConfigurationFlags } from 'src/entities/domain/configuration';
 
-const BADGE_COLOR = '#ffffff';
+console.log('background');
 
-function notify(message: ServiceWorkerEvent) {
-  if (message === ServiceWorkerEvent.Reload) {
-    chrome.storage.local.get(
-      [BrowserStorageKey.Profiles, BrowserStorageKey.SelectedProfile, BrowserStorageKey.IsPaused],
-      setBrowserHeaders,
-    );
-  }
-}
-
-chrome.runtime.onStartup.addListener(function () {
-  chrome.storage.local.get(
-    [BrowserStorageKey.Profiles, BrowserStorageKey.SelectedProfile, BrowserStorageKey.IsPaused],
-    async result => {
-      Object.keys(result).length && setBrowserHeaders(result);
+chrome.runtime.onInstalled.addListener(() => {
+  chrome.storage.local.set({
+    config: {
+      [ConfigurationFlags.G_LTD_DOMAINS]: true,
+      [ConfigurationFlags.MALWARE]: true,
+      [ConfigurationFlags.SCAMS]: true,
+      [ConfigurationFlags.SHOW_BLOCKS_COUNTER]: true,
     },
-  );
+  });
+  chrome.storage.local.set({
+    detections: [],
+  });
 });
 
-chrome.action.setBadgeBackgroundColor({ color: BADGE_COLOR });
-
-chrome.runtime.onMessage.addListener(notify);
+chrome.runtime.onMessage.addListener((request) => {
+  if (request.action === 'openNewTab') {
+    const params = new URLSearchParams({
+      ...request.payload,
+    });
+    chrome.tabs.create({
+      url: `chrome-extension://${chrome.runtime.id}/warning.html?${params}`,
+    });
+  }
+});

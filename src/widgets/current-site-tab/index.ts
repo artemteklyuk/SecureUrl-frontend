@@ -1,0 +1,1 @@
+export { CurrentSite } from 'src/widgets/current-site-tab/ui/current-site/CurrentSite';

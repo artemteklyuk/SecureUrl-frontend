@@ -1,33 +1,31 @@
 {
-  "ts-node": {
-    "compilerOptions": {
-      "module": "CommonJS"
+  "compilerOptions": {
+    "lib": ["DOM", "ES2020"],
+    "jsx": "react-jsx",
+    "target": "ES2020",
+    "noEmit": true,
+    "skipLibCheck": true,
+    "useDefineForClassFields": true,
+
+    /* modules */
+    "module": "ESNext",
+    "isolatedModules": true,
+    "resolveJsonModule": true,
+    "moduleResolution": "Bundler",
+    "esModuleInterop": true,
+    /* type checking */
+    "strict": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["./*"],
+      "@shared/*": ["./src/shared/*"],
+      "@app/*": ["./src/app/*"],
+      "@widgets/*": ["./src/widgets/*"],
+      "@features/*": ["./src/features/*"],
+      "@pages/*": ["./src/pages/*"],
     }
   },
-  "compilerOptions": {
-    "target": "es6",
-    "lib": ["es2017", "dom", "esnext"],
-    "module": "esnext",
-    "moduleResolution": "node",
-    "jsx": "react-jsx",
-    "strict": true,
-    "isolatedModules": false,
-    "skipLibCheck": true,
-    "noImplicitAny": true,
-    "suppressImplicitAnyIndexErrors": true,
-    "allowSyntheticDefaultImports": true,
-    "baseUrl": "./",
-    "resolveJsonModule": true,
-    "paths": {
-      "#app": ["src/app"],
-      "#pages/*": ["src/pages/*"],
-      "#shared/*": ["src/shared/*"],
-      "#features/*": ["src/features/*"],
-      "#entities/*": ["src/entities/*"],
-      "#widgets/*": ["src/widgets/*"]
-    },
-    "types": ["vitest/globals", "chrome"]
-  },
-  "include": ["src/**/*", "./vitest.config.ts"],
-  "exclude": ["node_modules"]
+  "include": ["src"]
 }
